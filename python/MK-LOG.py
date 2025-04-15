@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import os
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # Cek apakah folder 'data/' sudah ada
 if not os.path.exists("data"):
@@ -26,7 +26,6 @@ total_capture = 100
 name = ""
 absen_clicked = False
 absen_done = False  # Status apakah absen sudah dilakukan
-start_time = None  # Menandakan waktu mulai absensi
 
 # Lokasi penyimpanan file absensi
 csv_file = "data/absensi.csv"
@@ -143,19 +142,10 @@ while True:
             faces_data.append(resized_img)
         i += 1
 
-    # Menampilkan waktu yang telah berlalu sejak tombol absen ditekan
-    if start_time:
-        elapsed_time = (datetime.now() - start_time).seconds
-        cv2.putText(bg_copy, f"Waktu: {elapsed_time}s", (20, 520), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (50, 50, 255), 2)
-
+    cv2.putText(bg_copy, f"Captured: {len(faces_data)}/{total_capture}", (20, 520), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (50, 50, 255), 2)
     cv2.imshow("Absensi Wajah", bg_copy)
 
-    # Jika absen sudah dimulai, mulai hitung waktu
-    if absen_clicked and start_time is None:
-        start_time = datetime.now()
-
-    # Jika 10 detik sudah berlalu, simpan data absensi
-    if start_time and datetime.now() - start_time >= timedelta(seconds=10) and not absen_done:
+    if len(faces_data) >= total_capture and not absen_done:
         save_to_csv(name)
         absen_done = True
 
