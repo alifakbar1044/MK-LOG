@@ -1,0 +1,9 @@
+GURU
+
+ID : Jalaluddin S.Pd, M.Pd
+PW : 123
+
+ADMIN
+
+ID : ADMIN
+PW : 123
